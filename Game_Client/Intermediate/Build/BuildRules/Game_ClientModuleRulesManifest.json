@@ -1,8 +1,0 @@
-{
-	"SourceFiles": [
-		"D:\\Github\\FPS_DeckBuild\\Game_Client\\Source\\Game_Client\\Game_Client.Build.cs",
-		"D:\\Github\\FPS_DeckBuild\\Game_Client\\Source\\Game_Client.Target.cs",
-		"D:\\Github\\FPS_DeckBuild\\Game_Client\\Source\\Game_ClientEditor.Target.cs"
-	],
-	"EngineVersion": "5.5.4"
-}
