@@ -57,6 +57,11 @@ Build/*
 Build/*/**
 !Build/*/PakBlacklist*.txt
 
+!Game_Core/*.sln
+!Game_Core/*.vcxproj
+!Game_Core/*.vcxproj.filters
+!Game_Core/*.vcxproj.user
+
 # Don't ignore icon files in Build
 !Build/**/*.ico
 
