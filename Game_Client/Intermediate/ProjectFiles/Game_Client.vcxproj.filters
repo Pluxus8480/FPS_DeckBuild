@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <None Include="..\..\Game_Client.uproject" />
+    <Filter Include="Source">
+      <UniqueIdentifier>{F31BBDD1-B3E8-3BCC-9652-680E16935819}</UniqueIdentifier>
+    </Filter>
+    <None Include="..\..\Source\Game_Client.Target.cs">
+      <Filter>Source</Filter>
+    </None>
+    <None Include="..\..\Source\Game_ClientEditor.Target.cs">
+      <Filter>Source</Filter>
+    </None>
+    <Filter Include="Config">
+      <UniqueIdentifier>{FA535FFB-25E1-3D20-B416-52F9BE21E06E}</UniqueIdentifier>
+    </Filter>
+    <None Include="..\..\Config\DefaultEditor.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="..\..\Config\DefaultEditorPerProjectUserSettings.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="..\..\Config\DefaultEngine.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="..\..\Config\DefaultGame.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="..\..\Config\DefaultInput.ini">
+      <Filter>Config</Filter>
+    </None>
+    <Filter Include="Source\Game_Client">
+      <UniqueIdentifier>{EF30D48D-8BCB-3BBF-8C22-E4D45086AA1A}</UniqueIdentifier>
+    </Filter>
+    <None Include="..\..\Source\Game_Client\Game_Client.Build.cs">
+      <Filter>Source\Game_Client</Filter>
+    </None>
+    <ClCompile Include="..\..\Source\Game_Client\Game_Client.cpp">
+      <Filter>Source\Game_Client</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Game_Client\Game_Client.h">
+      <Filter>Source\Game_Client</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Game_Client\Game_ClientCharacter.cpp">
+      <Filter>Source\Game_Client</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Game_Client\Game_ClientCharacter.h">
+      <Filter>Source\Game_Client</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Game_Client\Game_ClientGameMode.cpp">
+      <Filter>Source\Game_Client</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Game_Client\Game_ClientGameMode.h">
+      <Filter>Source\Game_Client</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Game_Client\Game_ClientPickUpComponent.cpp">
+      <Filter>Source\Game_Client</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Game_Client\Game_ClientPickUpComponent.h">
+      <Filter>Source\Game_Client</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Game_Client\Game_ClientProjectile.cpp">
+      <Filter>Source\Game_Client</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Game_Client\Game_ClientProjectile.h">
+      <Filter>Source\Game_Client</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Game_Client\Game_ClientWeaponComponent.cpp">
+      <Filter>Source\Game_Client</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Game_Client\Game_ClientWeaponComponent.h">
+      <Filter>Source\Game_Client</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

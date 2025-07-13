@@ -1,0 +1,19 @@
+{
+    "Version": "1.2",
+    "Data": {
+        "Source": "d:\\github\\fps_deckbuild\\game_client\\intermediate\\build\\win64\\unrealeditor\\inc\\game_client\\uht\\game_clientgamemode.gen.cpp",
+        "ProvidedModule": "",
+        "PCH": "d:\\github\\fps_deckbuild\\game_client\\intermediate\\build\\win64\\x64\\game_clienteditor\\debuggame\\unrealed\\sharedpch.unrealed.project.nonoptimized.valapi.cpp20.h.pch",
+        "Includes": [
+            "d:\\github\\fps_deckbuild\\game_client\\intermediate\\build\\win64\\x64\\unrealeditor\\debuggame\\game_client\\definitions.game_client.h",
+            "d:\\github\\fps_deckbuild\\game_client\\source\\game_client\\game_clientgamemode.h",
+            "e:\\epicgames\\ue_5.5\\engine\\source\\runtime\\engine\\classes\\gameframework\\gamemodebase.h",
+            "e:\\epicgames\\ue_5.5\\engine\\source\\runtime\\engine\\classes\\engine\\serverstatreplicator.h",
+            "e:\\epicgames\\ue_5.5\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\engine\\uht\\serverstatreplicator.generated.h",
+            "e:\\epicgames\\ue_5.5\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\engine\\uht\\gamemodebase.generated.h",
+            "d:\\github\\fps_deckbuild\\game_client\\intermediate\\build\\win64\\unrealeditor\\inc\\game_client\\uht\\game_clientgamemode.generated.h"
+        ],
+        "ImportedModules": [],
+        "ImportedHeaderUnits": []
+    }
+}

@@ -1,0 +1,30 @@
+{
+    "Version": "1.2",
+    "Data": {
+        "Source": "d:\\github\\fps_deckbuild\\game_client\\intermediate\\build\\win64\\unrealeditor\\inc\\game_client\\uht\\game_clientpickupcomponent.gen.cpp",
+        "ProvidedModule": "",
+        "PCH": "d:\\github\\fps_deckbuild\\game_client\\intermediate\\build\\win64\\x64\\game_clienteditor\\development\\unrealed\\sharedpch.unrealed.project.valapi.cpp20.h.pch",
+        "Includes": [
+            "d:\\github\\fps_deckbuild\\game_client\\intermediate\\build\\win64\\x64\\unrealeditor\\development\\game_client\\definitions.game_client.h",
+            "d:\\github\\fps_deckbuild\\game_client\\source\\game_client\\game_clientpickupcomponent.h",
+            "e:\\epicgames\\ue_5.5\\engine\\source\\runtime\\engine\\classes\\components\\spherecomponent.h",
+            "e:\\epicgames\\ue_5.5\\engine\\source\\runtime\\engine\\classes\\components\\shapecomponent.h",
+            "e:\\epicgames\\ue_5.5\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\engine\\uht\\shapecomponent.generated.h",
+            "e:\\epicgames\\ue_5.5\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\engine\\uht\\spherecomponent.generated.h",
+            "d:\\github\\fps_deckbuild\\game_client\\source\\game_client\\game_clientcharacter.h",
+            "e:\\epicgames\\ue_5.5\\engine\\source\\runtime\\engine\\classes\\gameframework\\character.h",
+            "e:\\epicgames\\ue_5.5\\engine\\source\\runtime\\engine\\classes\\gameframework\\charactermovementreplication.h",
+            "e:\\epicgames\\ue_5.5\\engine\\source\\runtime\\net\\core\\public\\net\\core\\nettoken\\nettokenexportcontext.h",
+            "e:\\epicgames\\ue_5.5\\engine\\source\\runtime\\experimental\\iris\\core\\public\\iris\\serialization\\irisobjectreferencepackagemap.h",
+            "e:\\epicgames\\ue_5.5\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\iriscore\\uht\\irisobjectreferencepackagemap.generated.h",
+            "e:\\epicgames\\ue_5.5\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\engine\\uht\\charactermovementreplication.generated.h",
+            "e:\\epicgames\\ue_5.5\\engine\\source\\runtime\\engine\\classes\\gameframework\\rootmotionsource.h",
+            "e:\\epicgames\\ue_5.5\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\engine\\uht\\rootmotionsource.generated.h",
+            "e:\\epicgames\\ue_5.5\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\engine\\uht\\character.generated.h",
+            "d:\\github\\fps_deckbuild\\game_client\\intermediate\\build\\win64\\unrealeditor\\inc\\game_client\\uht\\game_clientcharacter.generated.h",
+            "d:\\github\\fps_deckbuild\\game_client\\intermediate\\build\\win64\\unrealeditor\\inc\\game_client\\uht\\game_clientpickupcomponent.generated.h"
+        ],
+        "ImportedModules": [],
+        "ImportedHeaderUnits": []
+    }
+}
