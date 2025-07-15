@@ -8,6 +8,6 @@ UHJBaseCard::UHJBaseCard()
 	Type = ECardType::Fire;
 }
 
-void UHJBaseCard::Use()
+void UHJBaseCard::Use(TScriptInterface<class IHJCardUserInterface> CardUser)
 {
 }

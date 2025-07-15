@@ -25,7 +25,7 @@ public:
 	UHJBaseCard();
 
 public:
-	virtual void Use();
+	virtual void Use(TScriptInterface<class IHJCardUserInterface> CardUser);
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Type)

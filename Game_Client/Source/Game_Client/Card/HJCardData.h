@@ -20,4 +20,13 @@ public:
 
 	UPROPERTY(EditAnywhere, Category = UI)
 	FName Description;
+	UPROPERTY(EditAnywhere, Category = UI)
+	FName FlavorText;
+
+	UPROPERTY(EditAnywhere, Category = Stat)
+	float BasePower;
+
+	UPROPERTY(EditAnywhere, Category = Stat)
+	float BaseMultiplier;
+
 };
