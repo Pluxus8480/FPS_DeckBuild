@@ -2,6 +2,7 @@
 
 
 #include "Card/HJBaseCard.h"
+#include "HJCardData.h"
 
 UHJBaseCard::UHJBaseCard()
 {
@@ -10,4 +11,9 @@ UHJBaseCard::UHJBaseCard()
 
 void UHJBaseCard::Use(TScriptInterface<class IHJCardUserInterface> CardUser)
 {
+}
+
+FName UHJBaseCard::GetName() const
+{
+	return CardData->CardName;
 }

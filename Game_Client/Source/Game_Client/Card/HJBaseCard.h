@@ -26,6 +26,7 @@ public:
 
 public:
 	virtual void Use(TScriptInterface<class IHJCardUserInterface> CardUser);
+	FName GetName() const;
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Type)

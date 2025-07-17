@@ -19,6 +19,8 @@ public:
 	TSoftObjectPtr<UTexture2D> UIImage;
 
 	UPROPERTY(EditAnywhere, Category = UI)
+	FName CardName;
+	UPROPERTY(EditAnywhere, Category = UI)
 	FName Description;
 	UPROPERTY(EditAnywhere, Category = UI)
 	FName FlavorText;
