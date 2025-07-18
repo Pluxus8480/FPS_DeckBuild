@@ -73,19 +73,19 @@ protected:
 
 // Weapon Section
 protected:
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Equipment, Meta = (AllowPrivateAccess = "true"))
+
+	UPROPERTY(EditAnywhere, Category = GunData)
+	TObjectPtr<class UHJGunData> GunDataAsset;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = GunData, Meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class UStaticMeshComponent> Weapon;
 
 	UPROPERTY()
 	TObjectPtr<class AHJGun> Gun;
 
-	UPROPERTY(EditAnywhere, Category = Equipment)
-	TSubclassOf<class AHJGun> GunClass;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Animation)
+	UPROPERTY()
 	TObjectPtr<class UAnimMontage> FireMontage;
 
-
-	void EquipGun(TSubclassOf<class AHJGun> AGun);
+	void EquipGun(TObjectPtr<class UHJGunData> AGun);
 
 };

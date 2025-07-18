@@ -19,6 +19,7 @@ public:
 	AHJGun();
     void Fire();
 
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -26,6 +27,7 @@ protected:
 
 public:
     TObjectPtr<class UStaticMeshComponent> const GetMeshComponent() { return GunMeshComponent; }
+    FName GetGunTypeNameTag() const { return GunTypeTag; }
 
  protected:
     // ÃÑ±â ¸Þ½¬ (1ÀÎÄª¿ë)

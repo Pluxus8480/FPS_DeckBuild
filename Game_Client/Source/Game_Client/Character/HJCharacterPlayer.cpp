@@ -10,6 +10,7 @@
 #include "InputMappingContext.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "../Gun/HJGun.h"
+#include "../Gun/HJGunData.h"
 
 DEFINE_LOG_CATEGORY(LogHJCharacterPlayer);
 AHJCharacterPlayer::AHJCharacterPlayer()
@@ -68,7 +69,7 @@ AHJCharacterPlayer::AHJCharacterPlayer()
 
 	// Weapon Component
 	Weapon = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Weapon"));
-	Weapon->SetupAttachment(GetMesh(), TEXT("RifleSocket"));
+	
 
 	//static ConstructorHelpers::FObjectFinder<UStaticMesh> RifleMeshRef(
 	//	TEXT("/Game/Weapons_Free/Meshes/SM_rifle_001.SM_rifle_001")
@@ -103,7 +104,7 @@ void AHJCharacterPlayer::BeginPlay()
 
 		Subsystem->AddMappingContext(DefaultMappingContext, 0);
 	}
-	EquipGun(GunClass);
+	EquipGun(GunDataAsset);
 
 }
 
@@ -168,29 +169,43 @@ void AHJCharacterPlayer::FPSToggleSprint()
 	}
 }
 
-void AHJCharacterPlayer::EquipGun(TSubclassOf<class AHJGun> AGun)
-{
 
-	if (GunClass)
+
+void AHJCharacterPlayer::EquipGun(TObjectPtr<class UHJGunData> AGunData)
+{
+	if (AGunData)
 	{
-		UE_LOG(LogHJCharacterPlayer, Warning, TEXT("EquipGun"));
+		// 데이터 입력 구간
+		if (AGunData->PlayerMesh.IsPending())
+			AGunData->PlayerMesh.LoadSynchronous();
+
+		GetMesh()->SetSkeletalMesh(AGunData->PlayerMesh.Get());
+		GetMesh()->SetAnimInstanceClass(AGunData->PlayerAnimInstance);
+
+
+		AHJGun* DefaultGun = AGunData->GunClass->GetDefaultObject<AHJGun>();
+
+		if(DefaultGun->GetGunTypeNameTag() == "Rifle")
+			Weapon->SetupAttachment(GetMesh(), TEXT("RifleSocket"));
+		else if(DefaultGun->GetGunTypeNameTag() == "Pistol")
+			Weapon->SetupAttachment(GetMesh(), TEXT("PistolSocket"));
+
+
 		FActorSpawnParameters SpawnParams;
 		SpawnParams.Owner = this;
 
-		AHJGun* SpawnedGun = GetWorld()->SpawnActor<AHJGun>(GunClass, FVector::ZeroVector, FRotator::ZeroRotator, SpawnParams);
+
+		AHJGun* SpawnedGun = GetWorld()->SpawnActor<AHJGun>(AGunData->GunClass, FVector::ZeroVector, FRotator::ZeroRotator, SpawnParams);
 		if (SpawnedGun)
 		{
 			SpawnedGun->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, TEXT("RifleSocket"));
 			Gun = SpawnedGun;
+
+			FireMontage = AGunData->GunFireMontage;
+
 		}
+
 	}
-	else
-		UE_LOG(LogHJCharacterPlayer, Warning, TEXT("NO EquipGun"));
-	//if (AGun)
-	//{
-	//	Gun = AGun;
-	//	Weapon->SetStaticMesh(AGun->GetMeshComponent()->GetStaticMesh());
-	//}
 }
 
 void AHJCharacterPlayer::PlayFireMontage()
