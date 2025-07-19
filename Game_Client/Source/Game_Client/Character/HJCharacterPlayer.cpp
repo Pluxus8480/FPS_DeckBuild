@@ -198,7 +198,11 @@ void AHJCharacterPlayer::EquipGun(TObjectPtr<class UHJGunData> AGunData)
 		AHJGun* SpawnedGun = GetWorld()->SpawnActor<AHJGun>(AGunData->GunClass, FVector::ZeroVector, FRotator::ZeroRotator, SpawnParams);
 		if (SpawnedGun)
 		{
-			SpawnedGun->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, TEXT("RifleSocket"));
+			if (DefaultGun->GetGunTypeNameTag() == "Rifle")
+				SpawnedGun->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, TEXT("RifleSocket"));
+			else if (DefaultGun->GetGunTypeNameTag() == "Pistol")
+				SpawnedGun->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, TEXT("PistolSocket"));
+
 			Gun = SpawnedGun;
 
 			FireMontage = AGunData->GunFireMontage;
