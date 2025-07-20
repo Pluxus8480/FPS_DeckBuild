@@ -24,5 +24,5 @@ class GAME_CLIENT_API IHJCardUserInterface
 public:
 	virtual void Fire(float BaseDamage) = 0;
 	virtual void Discard(uint32 AmountDiscard) = 0;
-
+	//TODO : 총구 위치나 크로스헤어 위치 받아올 수 있는 인터페이스
 };
