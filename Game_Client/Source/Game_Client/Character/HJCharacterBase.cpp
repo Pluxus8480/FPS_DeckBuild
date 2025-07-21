@@ -25,7 +25,6 @@ AHJCharacterBase::AHJCharacterBase()
 	GetCharacterMovement()->MinAnalogWalkSpeed = 20.f;
 	GetCharacterMovement()->BrakingDecelerationWalking = 2000.f;
 
-
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh> CharacterMeshRef(TEXT("/Script/Engine.SkeletalMesh'/Game/HJProject/Player/Rifle/Rifle_Animation.Rifle_Animation'"));
 	if (CharacterMeshRef.Object)
 	{
