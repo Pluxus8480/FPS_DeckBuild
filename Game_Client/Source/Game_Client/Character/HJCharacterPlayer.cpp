@@ -216,11 +216,11 @@ void AHJCharacterPlayer::PlayFireMontage()
 {
 	if (FireMontage)
 	{
-		UE_LOG(LogHJCharacterPlayer, Warning, TEXT("Fire Montage"));
+		//UE_LOG(LogHJCharacterPlayer, Warning, TEXT("Fire Montage"));
 		UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
-		if (AnimInstance && !AnimInstance->Montage_IsPlaying(FireMontage))
+		if (AnimInstance/* && !AnimInstance->Montage_IsPlaying(FireMontage)*/)
 		{
-			UE_LOG(LogHJCharacterPlayer, Warning, TEXT("Fire Montage playing"));
+			/*UE_LOG(LogHJCharacterPlayer, Warning, TEXT("Fire Montage playing"));*/
 			AnimInstance->Montage_Play(FireMontage);
 		}
 	}

@@ -6,7 +6,7 @@
 
 AHJGameMode::AHJGameMode()
 {
-	static ConstructorHelpers::FClassFinder<APawn> DefaultPawnClassRef(TEXT("/Game/HJProject/Player/BP_Player.BP_Player_C"));
+	static ConstructorHelpers::FClassFinder<APawn> DefaultPawnClassRef(TEXT("/Game/HJProject/Player/BP_PlayerTPS.BP_PlayerTPS_C"));
 	if (DefaultPawnClassRef.Class)
 	{
 		DefaultPawnClass = DefaultPawnClassRef.Class;

@@ -6,7 +6,9 @@
 #include "Kismet/GameplayStatics.h"
 #include "DrawDebugHelpers.h"
 #include "../Character/HJCharacterPlayer.h"
-
+#include "NiagaraSystem.h"
+#include "NiagaraFunctionLibrary.h" 
+#include "NiagaraComponent.h" 
 
 DEFINE_LOG_CATEGORY(LogHJGun);
 
@@ -29,13 +31,21 @@ void AHJGun::BeginPlay()
 
 void AHJGun::Fire()
 {
-
- 
-
     // 이펙트 및 사운드
     if (GunEffect)
-        UGameplayStatics::SpawnEmitterAttached(GunEffect, GunMeshComponent, MuzzleSocketName);
-
+    {
+        UNiagaraComponent* NiagaraComp = UNiagaraFunctionLibrary::SpawnSystemAttached(
+            GunEffect,                        // NiagaraSystem
+            GunMeshComponent,                 // AttachComponent
+            MuzzleSocketName,                 // AttachPointName
+            FVector::ZeroVector,              // Location offset
+            FRotator::ZeroRotator,            // Rotation offset
+            EAttachLocation::SnapToTarget,    // Attach location type
+            true                              // AutoDestroy
+        );
+        FVector MuzzleForward = GunMeshComponent->GetSocketTransform("MuzzleFlashSocket").GetUnitAxis(EAxis::X);
+        NiagaraComp->SetVectorParameter("User.ForwardVector", MuzzleForward);
+    }
     if (FireSound)
         UGameplayStatics::PlaySoundAtLocation(this, FireSound, GetActorLocation());
 

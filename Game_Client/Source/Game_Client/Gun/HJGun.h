@@ -46,7 +46,7 @@ public:
 
     // 이펙트 & 사운드
     UPROPERTY(EditAnywhere)
-    TObjectPtr<class UParticleSystem> GunEffect;
+    TObjectPtr<class UNiagaraSystem> GunEffect;
 
     UPROPERTY(EditAnywhere)
     TObjectPtr<class USoundBase> FireSound;
