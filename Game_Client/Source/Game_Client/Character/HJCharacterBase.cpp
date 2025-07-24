@@ -4,6 +4,7 @@
 #include "Character/HJCharacterBase.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Collision/HJCollision.h"
 
 // Sets default values
 AHJCharacterBase::AHJCharacterBase()
@@ -14,7 +15,8 @@ AHJCharacterBase::AHJCharacterBase()
 
 	// Capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
-	GetCapsuleComponent()->SetCollisionProfileName(TEXT("Pawn"));
+	//GetCapsuleComponent()->SetCollisionProfileName(TEXT("Pawn"));
+	GetCapsuleComponent()->SetCollisionProfileName(CPROFILE_HJCAPSULE);
 
 	// Movement
 	GetCharacterMovement()->bOrientRotationToMovement = false;
