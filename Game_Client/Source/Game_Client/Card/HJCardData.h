@@ -31,4 +31,16 @@ public:
 	UPROPERTY(EditAnywhere, Category = Stat)
 	float BaseMultiplier;
 
+	UPROPERTY(EditAnywhere, Category = Stat)
+	float BaseCastSpeed;
+
+	UPROPERTY(EditAnywhere, Category = Character)
+	FName MotionTag;
+
+	UPROPERTY(EditAnywhere, Category = Effect)
+	TSoftObjectPtr<class UParticleSystem> Effect;
+	UPROPERTY(EditAnywhere, Category = Effect)
+	TSoftObjectPtr<class UParticleSystem> DisappearingEffect;
+
+
 };

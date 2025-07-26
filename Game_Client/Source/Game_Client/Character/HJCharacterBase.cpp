@@ -10,7 +10,7 @@
 AHJCharacterBase::AHJCharacterBase()
 {
 	// Pawn
-	bUseControllerRotationYaw = true;
+	bUseControllerRotationYaw = false;
 
 
 	// Capsule
@@ -19,7 +19,7 @@ AHJCharacterBase::AHJCharacterBase()
 	GetCapsuleComponent()->SetCollisionProfileName(CPROFILE_HJCAPSULE);
 
 	// Movement
-	GetCharacterMovement()->bOrientRotationToMovement = false;
+	GetCharacterMovement()->bOrientRotationToMovement = true;
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 500.0f, 0.0f);
 	GetCharacterMovement()->JumpZVelocity = 700.f;
 	GetCharacterMovement()->AirControl = 0.35f;

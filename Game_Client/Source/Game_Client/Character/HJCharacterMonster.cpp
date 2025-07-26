@@ -7,6 +7,7 @@
 #include "Engine/DamageEvents.h"
 #include "AI/HJAIController_Monster.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Animation/AnimMontage.h"
 
 AHJCharacterMonster::AHJCharacterMonster()
 {
@@ -19,26 +20,38 @@ AHJCharacterMonster::AHJCharacterMonster()
 	AttackSpeed = 1.f;
 	PatrolRadius = 1000.f;
 	Attack = 1.f;
-	GetCharacterMovement()->RotationRate = FRotator(0.0f, 90.0f, 0.0f);
+	GetCharacterMovement()->RotationRate = FRotator(360.0f, 360.0f, 360.0f);
 	static ConstructorHelpers::FClassFinder<UAnimInstance> AnimInstanceClassRef(TEXT("/Game/HJProject/Animation/Monster/ABP_Monster.ABP_Monster_C"));
 	if (AnimInstanceClassRef.Class)
 	{
 		GetMesh()->SetAnimInstanceClass(AnimInstanceClassRef.Class);
 	}
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> AttackMontageClassRef(TEXT("/Script/Engine.AnimMontage'/Game/HJProject/Animation/Monster/AM_MonsterAttack.AM_MonsterAttack'"));
+	if (AttackMontageClassRef.Object)
+	{
+		AttackMontage = AttackMontageClassRef.Object;
+	}
 }
 
-void AHJCharacterMonster::SetAIAttackDelegate(const FHJCharacterAttackFinished& OnAttackFinishedDelegate)
+void AHJCharacterMonster::PostInitializeComponents()
 {
-	FTimerHandle Timer;
-	GetWorld()->GetTimerManager().SetTimer(Timer, FTimerDelegate::CreateLambda([OnAttackFinishedDelegate]
-		{
-			OnAttackFinishedDelegate.ExecuteIfBound(); 
-		}), 1.f, false);
+	Super::PostInitializeComponents();
+	GetMesh()->GetAnimInstance()->OnMontageEnded.AddDynamic(this, &AHJCharacterMonster::AttackFinished);
+}
+
+
+void AHJCharacterMonster::SetAIAttackDelegate(const FHJCharacterAttackFinished& OnAttackFinishedDelegate)
+{	
+	OnAttackFinished = OnAttackFinishedDelegate;
 }
 
 void AHJCharacterMonster::AttackByAI()
 {
-	UE_LOG(LogActor , Log, TEXT("%s"), TEXT("AttackByAI"))
+	GetMesh()->GetAnimInstance()->Montage_Play(AttackMontage);
+	FOnMontageEnded EndDelegate;
+	EndDelegate.BindUObject(this, &AHJCharacterMonster::AttackFinished);
+
+	GetMesh()->GetAnimInstance()->Montage_SetEndDelegate(EndDelegate, AttackMontage);
 	AttackSweep();
 }
 
@@ -60,6 +73,11 @@ float AHJCharacterMonster::GetAIAttackSpeed()
 float AHJCharacterMonster::GetAIPatrolRadius()
 {
 	return PatrolRadius;
+}
+
+void AHJCharacterMonster::AttackFinished(UAnimMontage* TargetMontage, bool IsProperlyEnded)
+{
+	OnAttackFinished.ExecuteIfBound();
 }
 
 void AHJCharacterMonster::AttackSweep()

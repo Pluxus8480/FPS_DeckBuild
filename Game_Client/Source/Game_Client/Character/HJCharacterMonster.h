@@ -18,7 +18,8 @@ class GAME_CLIENT_API AHJCharacterMonster : public AHJCharacterBase, public IHJC
 public:
 	AHJCharacterMonster();
 
-
+protected:
+	virtual void PostInitializeComponents() override;
 
 //AIInterface Section
 public:
@@ -40,11 +41,15 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = AI)
 	float Attack;
 
+protected:
 	FHJCharacterAttackFinished OnAttackFinished;
+	void AttackFinished(UAnimMontage* TargetMontage, bool IsProperlyEnded);
 
 protected:
 	void AttackSweep();
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Stat, Meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<class UAnimMontage> AttackMontage;
 
 
 };
