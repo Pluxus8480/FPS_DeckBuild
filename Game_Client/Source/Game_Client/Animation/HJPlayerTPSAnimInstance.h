@@ -9,6 +9,17 @@
 /**
  * 
  */
+
+UENUM(BlueprintType)
+enum class EPlayerMoveDirection : uint8
+{
+	None,
+	Forward,
+	Backward,
+	Left,
+	Right
+};
+
 UCLASS()
 class GAME_CLIENT_API UHJPlayerTPSAnimInstance : public UAnimInstance
 {
@@ -56,4 +67,7 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Character)
 	uint8 bIsKeyInput : 1;
+
+	UPROPERTY(BlueprintReadOnly, Category = Character)
+	EPlayerMoveDirection MoveDirection;
 };

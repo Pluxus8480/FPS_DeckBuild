@@ -12,7 +12,7 @@ AHJCharacterBaseTPS::AHJCharacterBaseTPS()
 
 	// Pawn
 	bUseControllerRotationPitch = false;
-	bUseControllerRotationYaw = false;
+	bUseControllerRotationYaw = true;
 	bUseControllerRotationRoll = false;
 
 	// Capsule
@@ -20,7 +20,7 @@ AHJCharacterBaseTPS::AHJCharacterBaseTPS()
 	GetCapsuleComponent()->SetCollisionProfileName(TEXT("Pawn"));
 
 	// Movement
-	GetCharacterMovement()->bOrientRotationToMovement = true;
+	GetCharacterMovement()->bOrientRotationToMovement = false;
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 500.0f, 0.0f);
 	GetCharacterMovement()->JumpZVelocity = 500.f;
 	GetCharacterMovement()->AirControl = 0.35f;

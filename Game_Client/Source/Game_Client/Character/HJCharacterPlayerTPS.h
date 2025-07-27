@@ -5,13 +5,33 @@
 #include "CoreMinimal.h"
 #include "Character/HJCharacterBaseTPS.h"
 #include "InputActionValue.h"
+#include "../Interface/HJProjectileAttackInterface.h"
 #include "HJCharacterPlayerTPS.generated.h"
 
+DECLARE_LOG_CATEGORY_EXTERN(LogHJCharacterPlayerTPS, Log, All);
 /**
  * 
  */
+
+UENUM()
+enum class EPlayerState: uint8
+{
+	IDLE = 0,
+	WALK_FRONT,
+	SIDEWALK,
+	SPRINT
+};
+UENUM()
+enum class EPlayerMovementDirection : uint8
+{
+	WALK_F = 0,
+	WALK_L,
+	WALK_R,
+	WALK_B,
+};
+
 UCLASS()
-class GAME_CLIENT_API AHJCharacterPlayerTPS : public AHJCharacterBaseTPS
+class GAME_CLIENT_API AHJCharacterPlayerTPS : public AHJCharacterBaseTPS, public IHJProjectileAttackInterface
 {
 
 	GENERATED_BODY()
@@ -23,8 +43,8 @@ public:
 	AHJCharacterPlayerTPS();
 public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
-	// Camera Section
+	virtual void FireProjectile() override;
+// Camera Section
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, Meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class USpringArmComponent> CameraBoom;
@@ -32,7 +52,7 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, Meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class UCameraComponent> FollowCamera;
 
-	// Input Section
+// Input Section
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, Meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class UInputMappingContext> DefaultMappingContext;
@@ -49,25 +69,51 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, Meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class UInputAction> SprintAction;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, Meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<class UInputAction> AttackAction;
+
 	void TPSMove(const FInputActionValue& Value);
 	void TPSLook(const FInputActionValue& Value);
 	void TPSToggleSprint();
+public:
+	void TPSAttack(const FInputActionValue& Value);
 private:
 	void CheckKeyInput(bool IsInput);
 
 
-	// Move Section
+// Move Section
+public:
+	void SetMovementState(EPlayerState NewType);
+	void SetMovementDirection(EPlayerMovementDirection NewType);
+
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Sprint")
 	float WalkSpeed = 500.f;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Sprint")
+	float SideWalkSpeed = 250.f;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Sprint")
 	float SprintSpeed = 750.f;
 
-	FVector2D LastInputVector = {};
-	bool bIsSprinting = false;
-
+	EPlayerState CurrnetMovementType = EPlayerState::IDLE;
+	EPlayerMovementDirection CurrnetMovementDirection = EPlayerMovementDirection::WALK_F;
 	// 얼마나 입력이 작으면 정지로 판단할지
 	const float SprintStopThreshold = 0.1f;
 
+	// 현재 누르고 있는 방향 키 리스트 (선입선출)
+	TArray<EPlayerMovementDirection> PressedDirections;
+
+// AttackSection
+public:
+	virtual TSubclassOf<class AHJProjectile> GetCurrentProjectile() const override  { return CurrentProjectile; }
+protected:
+	TObjectPtr<class UAnimMontage> AttackMontage;
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class AHJProjectile> CurrentProjectile;
+
+private:
+	void AttackRotation(float DeltaTime);
+	bool bWantsToRotateToCamera = false;
 };

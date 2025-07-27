@@ -33,5 +33,27 @@ void UHJPlayerTPSAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 		bIsIdle = GroundSpeed < MovingThreshould;
 		bIsFalling = Movement->IsFalling();
 		bIsJumping = bIsFalling & (Velocity.Z > JumpingThreshould);
+
+
+		if (!Owner)
+			return;
+		FVector MovementDir = Velocity.GetSafeNormal2D();
+		FVector Forward = Owner->GetActorForwardVector();
+		FVector Right = Owner->GetActorRightVector();
+
+
+		float ForwardDot = FVector::DotProduct(MovementDir, Forward);
+		float RightDot = FVector::DotProduct(MovementDir, Right);
+
+		if (ForwardDot > 0.7f)
+			MoveDirection = EPlayerMoveDirection::Forward;
+		else if (ForwardDot < -0.7f)
+			MoveDirection = EPlayerMoveDirection::Backward;
+		else if (RightDot > 0.1f)
+			MoveDirection = EPlayerMoveDirection::Right;
+		else if (RightDot < -0.1f)
+			MoveDirection = EPlayerMoveDirection::Left;
+		else
+			MoveDirection = EPlayerMoveDirection::None;
 	}
 }
