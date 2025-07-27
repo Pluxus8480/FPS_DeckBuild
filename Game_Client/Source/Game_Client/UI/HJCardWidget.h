@@ -19,6 +19,9 @@ public:
 protected:
 	virtual void NativeConstruct() override;
 
+public:
+	void UpdateUIData(class UHJCardData* CardData);
+
 protected:
 	UPROPERTY()
 	TObjectPtr<class UTextBlock> CardName;

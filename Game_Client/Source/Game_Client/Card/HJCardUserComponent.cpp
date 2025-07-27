@@ -3,7 +3,7 @@
 
 #include "Card/HJCardUserComponent.h"
 #include "HJBaseCard.h"
-
+#include "Interface/HJCardUserInterface.h"
 
 // Sets default values for this component's properties
 UHJCardUserComponent::UHJCardUserComponent()
@@ -15,6 +15,10 @@ UHJCardUserComponent::UHJCardUserComponent()
 	// ...
 
 	CurrentDeck = 0;
+	if (0 == Decks.Num())
+	{
+		Decks.Add({});
+	}
 }
 
 
@@ -27,24 +31,33 @@ void UHJCardUserComponent::BeginPlay()
 	
 }
 
-void UHJCardUserComponent::Fire(float BaseDamage)
+//void UHJCardUserComponent::Fire(float BaseDamage)
+//{
+//	//
+//
+//
+//	++CurrentTopDeckIndex[CurrentDeck];
+//}
+//
+//void UHJCardUserComponent::Discard(uint32 AmountDiscard)
+//{
+//	int32 CurrentDeckSize = Decks[CurrentDeck].Deck.Num();
+//	int32 NextTopDeck = CurrentTopDeckIndex[CurrentDeck] + (int32)AmountDiscard;
+//	if (NextTopDeck > CurrentDeckSize)
+//	{
+//		Shuffle(CurrentDeck);
+//		NextTopDeck = 0;
+//	}
+//	CurrentTopDeckIndex[CurrentDeck] = NextTopDeck;
+//}
+
+void UHJCardUserComponent::UseCard()
 {
-	//
-
-
-	++CurrentTopDeckIndex[CurrentDeck];
-}
-
-void UHJCardUserComponent::Discard(uint32 AmountDiscard)
-{
-	int32 CurrentDeckSize = Decks[CurrentDeck].Deck.Num();
-	int32 NextTopDeck = CurrentTopDeckIndex[CurrentDeck] + (int32)AmountDiscard;
-	if (NextTopDeck > CurrentDeckSize)
+	IHJCardUserInterface* CardUser = Cast<IHJCardUserInterface>(GetOwner());
+	if (CardUser)
 	{
-		Shuffle(CurrentDeck);
-		NextTopDeck = 0;
+		CardUser->UseCard(Decks[CurrentDeck].Deck[CurrentTopDeckIndex[CurrentDeck]]);
 	}
-	CurrentTopDeckIndex[CurrentDeck] = NextTopDeck;
 }
 
 void UHJCardUserComponent::AddCard(TObjectPtr<class UHJBaseCard> NewCard, int32 DeckToAdd)
@@ -79,7 +92,17 @@ void UHJCardUserComponent::Shuffle(int32 DeckToShuffle)
 
 void UHJCardUserComponent::SetCurrentDeck(int32 newCurrentDeck)
 {
-	CurrentDeck = newCurrentDeck;
+	CurrentDeck = FMath::Clamp(newCurrentDeck, 0, Decks.Num());
+}
+
+void UHJCardUserComponent::NextCard()
+{
+	++CurrentTopDeckIndex[CurrentDeck];
+	if (Decks[CurrentDeck].Deck.Num() <= CurrentTopDeckIndex[CurrentDeck])
+	{
+		Shuffle(CurrentDeck);
+		CurrentTopDeckIndex[CurrentDeck] = 0;
+	}
 }
 
 

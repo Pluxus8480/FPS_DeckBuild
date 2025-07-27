@@ -13,6 +13,12 @@ UCLASS()
 class GAME_CLIENT_API UHJCardData : public UPrimaryDataAsset
 {
 	GENERATED_BODY()
+
+public:
+	FPrimaryAssetId GetPrimaryAssetId() const override
+	{
+		return FPrimaryAssetId("HJCardData", GetFName());
+	}
 	
 public:
 	UPROPERTY(EditAnywhere, Category = UI)
@@ -31,4 +37,17 @@ public:
 	UPROPERTY(EditAnywhere, Category = Stat)
 	float BaseMultiplier;
 
+	UPROPERTY(EditAnywhere, Category = Stat)
+	float BaseCastSpeed;
+
+	UPROPERTY(EditAnywhere, Category = Character)
+	FName MotionTag;
+
+	UPROPERTY(EditAnywhere, Category = Effect)
+	TSoftObjectPtr<class UParticleSystem> Effect;
+	UPROPERTY(EditAnywhere, Category = Effect)
+	TSoftObjectPtr<class UParticleSystem> DisappearingEffect;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = CardClass)
+	TSubclassOf<class UHJBaseCard> CardClass;
 };
