@@ -15,7 +15,16 @@ class GAME_CLIENT_API AHJPlayerController : public APlayerController
 	GENERATED_BODY()
 	
 
-
+public:
+	AHJPlayerController();
 protected:
 	virtual void BeginPlay() override;
+
+// HUD Section
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = HUD)
+	TSubclassOf<class UHJCrosshairWidget> HJHUDWidgetClass;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = HUD)
+	TObjectPtr<class UHJCrosshairWidget> HJHUDWidget;
 };

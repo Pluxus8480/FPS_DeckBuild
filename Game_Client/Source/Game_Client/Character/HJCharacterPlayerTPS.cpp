@@ -130,7 +130,8 @@ void AHJCharacterPlayerTPS::FireProjectile()
 		{
 			FVector Direction = FollowCamera->GetForwardVector();
 			//FVector FireDirection = ProjectileRotation.Vector();
-			FVector WorldLocation;
+			Projectile->FireInDirection(Direction);
+			/*FVector WorldLocation;
 			FVector WorldDirection;
 
 			APlayerController* PC = Cast<APlayerController>(GetController());
@@ -140,7 +141,7 @@ void AHJCharacterPlayerTPS::FireProjectile()
 				WorldLocation, WorldDirection))
 			{
 				Projectile->FireInDirection(WorldDirection);
-			}
+			}*/
 			
 		}
 	}
