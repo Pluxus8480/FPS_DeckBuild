@@ -45,7 +45,7 @@ void UHJPlayerTPSAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 		float ForwardDot = FVector::DotProduct(MovementDir, Forward);
 		float RightDot = FVector::DotProduct(MovementDir, Right);
 
-		if (ForwardDot > 0.7f)
+		if (ForwardDot > 0.6f)
 			MoveDirection = EPlayerMoveDirection::Forward;
 		else if (ForwardDot < -0.7f)
 			MoveDirection = EPlayerMoveDirection::Backward;

@@ -101,8 +101,6 @@ protected:
 	// 얼마나 입력이 작으면 정지로 판단할지
 	const float SprintStopThreshold = 0.1f;
 
-	// 현재 누르고 있는 방향 키 리스트 (선입선출)
-	TArray<EPlayerMovementDirection> PressedDirections;
 
 // AttackSection
 public:
