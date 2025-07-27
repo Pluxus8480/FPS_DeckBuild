@@ -8,6 +8,12 @@
 #include "AI/HJAIController_Monster.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Animation/AnimMontage.h"
+#include "Card/HJCardUserComponent.h"
+#include "Card/HJBaseCard.h"
+#include "Card/HJCardData.h"
+#include "Particles/ParticleSystem.h"
+#include "Kismet/GameplayStatics.h"
+
 
 AHJCharacterMonster::AHJCharacterMonster()
 {
@@ -31,12 +37,27 @@ AHJCharacterMonster::AHJCharacterMonster()
 	{
 		AttackMontage = AttackMontageClassRef.Object;
 	}
+
+	CardUser = CreateDefaultSubobject<UHJCardUserComponent>(TEXT("CardUser"));
+
 }
 
 void AHJCharacterMonster::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
 	GetMesh()->GetAnimInstance()->OnMontageEnded.AddDynamic(this, &AHJCharacterMonster::AttackFinished);
+}
+
+void AHJCharacterMonster::UseCard(UHJBaseCard* CardUsed)
+{
+	const UHJCardData* CardData = CardUsed->GetCardData();
+	if (!CardData->Effect.IsValid())
+	{
+		CardData->Effect.LoadSynchronous();
+	}
+	UParticleSystem* CardEffect = CardData->Effect.Get();
+	
+	UGameplayStatics::SpawnEmitterAttached(CardEffect, GetMesh(), TEXT("RightHand"));
 }
 
 

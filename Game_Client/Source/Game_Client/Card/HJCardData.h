@@ -13,6 +13,12 @@ UCLASS()
 class GAME_CLIENT_API UHJCardData : public UPrimaryDataAsset
 {
 	GENERATED_BODY()
+
+public:
+	FPrimaryAssetId GetPrimaryAssetId() const override
+	{
+		return FPrimaryAssetId("HJCardData", GetFName());
+	}
 	
 public:
 	UPROPERTY(EditAnywhere, Category = UI)
@@ -42,5 +48,6 @@ public:
 	UPROPERTY(EditAnywhere, Category = Effect)
 	TSoftObjectPtr<class UParticleSystem> DisappearingEffect;
 
-
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = CardClass)
+	TSubclassOf<class UHJBaseCard> CardClass;
 };

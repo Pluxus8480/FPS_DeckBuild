@@ -23,9 +23,15 @@ public:
 	// Called every frame
 	//virtual void Tick(float DeltaTime) override;
 
-	void OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepHitResult);
-protected:
+	protected:
 	FORCEINLINE class UBoxComponent* GetTrigger() { return Trigger; }
+
+protected:
+	UFUNCTION()
+	void OnEffectFinished(class UParticleSystemComponent* ParticleSystem);
+
+	UFUNCTION()
+	void OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepHitResult);
 
 protected:
 	virtual void PostInitializeComponents() override;
@@ -40,4 +46,6 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category = Effect)
 	TObjectPtr<class UParticleSystemComponent> Effect;
 
+	UPROPERTY(EditAnywhere, Category = Cards)
+	TArray<class UHJCardData*> Cards;
 };

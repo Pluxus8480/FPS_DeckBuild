@@ -16,5 +16,5 @@ class GAME_CLIENT_API UHJCard_Fire : public UHJBaseCard
 public:
 	UHJCard_Fire();
 public:
-	virtual void Use(TScriptInterface<class IHJCardUserInterface> CardUser) override;
+	virtual void Use() override;
 };

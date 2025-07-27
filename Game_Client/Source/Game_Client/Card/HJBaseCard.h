@@ -25,13 +25,18 @@ public:
 	UHJBaseCard();
 
 public:
-	virtual void Use(TScriptInterface<class IHJCardUserInterface> CardUser);
+	virtual void InitFromData(class UHJCardData* InCardData);
+	
+	virtual void Use();
 	FName GetName() const;
+	const class UHJCardData* GetCardData() { return CardData; };
+
+
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Type)
 	ECardType Type;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Data)
+	UPROPERTY()
 	TObjectPtr<class UHJCardData> CardData;
 };

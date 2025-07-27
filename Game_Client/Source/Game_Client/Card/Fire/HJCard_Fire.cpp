@@ -10,8 +10,6 @@ UHJCard_Fire::UHJCard_Fire()
 	Type = ECardType::Fire;
 }
 
-void UHJCard_Fire::Use(TScriptInterface<class IHJCardUserInterface> CardUser)
+void UHJCard_Fire::Use()
 {
-	CardUser->Fire(CardData->BasePower);
-	CardUser->Discard(CardData->BaseMultiplier - 1.f);
 }

@@ -5,13 +5,14 @@
 #include "CoreMinimal.h"
 #include "Character/HJCharacterBase.h"
 #include "Interface/HJCharacterAIInterface.h"
+#include "Interface/HJCardUserInterface.h"
 #include "HJCharacterMonster.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class GAME_CLIENT_API AHJCharacterMonster : public AHJCharacterBase, public IHJCharacterAIInterface
+class GAME_CLIENT_API AHJCharacterMonster : public AHJCharacterBase, public IHJCharacterAIInterface, public IHJCardUserInterface
 {
 	GENERATED_BODY()
 	
@@ -20,6 +21,10 @@ public:
 
 protected:
 	virtual void PostInitializeComponents() override;
+
+//CardUserInterface Section
+public:
+	virtual void UseCard(class UHJBaseCard* CardUsed) override;
 
 //AIInterface Section
 public:
@@ -51,5 +56,7 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Stat, Meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class UAnimMontage> AttackMontage;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Card, Meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<class UHJCardUserComponent> CardUser;
 
 };
