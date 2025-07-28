@@ -4,11 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
-#include "HJCardUserInterface.generated.h"
+#include "HJCardUIInterface.generated.h"
 
 // This class does not need to be modified.
 UINTERFACE(MinimalAPI)
-class UHJCardUserInterface : public UInterface
+class UHJCardUIInterface : public UInterface
 {
 	GENERATED_BODY()
 };
@@ -16,16 +16,13 @@ class UHJCardUserInterface : public UInterface
 /**
  * 
  */
-class GAME_CLIENT_API IHJCardUserInterface
+class GAME_CLIENT_API IHJCardUIInterface
 {
 	GENERATED_BODY()
 
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
-	virtual void UseCard(class UHJBaseCard* CardUsed) = 0;
+	virtual void UpdateEventCaller(class UHJCardWidget* CardWidget) = 0;
 
-	virtual class UHJCardUserComponent* GetCardUser() = 0;
-
-	virtual void TryAddCard(class UHJCardData* CardData) = 0;
 
 };

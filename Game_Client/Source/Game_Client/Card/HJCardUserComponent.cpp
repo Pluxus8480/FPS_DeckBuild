@@ -4,6 +4,7 @@
 #include "Card/HJCardUserComponent.h"
 #include "HJBaseCard.h"
 #include "Interface/HJCardUserInterface.h"
+#include "HJCardUtils.h"
 
 // Sets default values for this component's properties
 UHJCardUserComponent::UHJCardUserComponent()
@@ -60,11 +61,16 @@ void UHJCardUserComponent::UseCard()
 	}
 }
 
-void UHJCardUserComponent::AddCard(TObjectPtr<class UHJBaseCard> NewCard, int32 DeckToAdd)
+void UHJCardUserComponent::AddCard(UHJBaseCard* NewCard, int32 DeckToAdd)
 {
 	ensure(DeckToAdd < Decks.Num());
 	Decks[DeckToAdd].Deck.Add(NewCard);
 	OnDeckAdded.Broadcast(DeckToAdd, *NewCard);
+}
+
+void UHJCardUserComponent::AddCard(UHJCardData* NewCardData, int32 DeckToAdd)
+{
+	AddCard(UHJCardUtils::CreateCard(this, NewCardData), DeckToAdd);
 }
 
 void UHJCardUserComponent::RemoveCard(int32 DeckToRemove, int32 CardIndexToRemove)

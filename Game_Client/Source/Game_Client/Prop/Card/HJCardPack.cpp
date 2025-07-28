@@ -9,6 +9,7 @@
 #include "Engine/AssetManager.h"
 #include "Card/HJCardData.h"
 #include "Game_Client.h"
+#include "UI/HJCardChoiceWidget.h"
 
 // Sets default values
 AHJCardPack::AHJCardPack()
@@ -39,8 +40,13 @@ AHJCardPack::AHJCardPack()
 		Effect->SetTemplate(EffectRef.Object);
 		Effect->bAutoActivate = false;
 	}
+
+	static ConstructorHelpers::FClassFinder<UHJCardChoiceWidget> CardChoiceWidgetClassRef(TEXT("/Game/UI/WBP_CardChoice.WBP_CardChoice_C"));
+	if (CardChoiceWidgetClassRef.Class)
+		CardChoiceWidgetClass = CardChoiceWidgetClassRef.Class;
+
 	////
-	
+///Script/UMGEditor.WidgetBlueprint''	
 }
 
 // Called when the game starts or when spawned
@@ -57,12 +63,37 @@ void AHJCardPack::OnEffectFinished(UParticleSystemComponent* ParticleSystem)
 
 void AHJCardPack::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepHitResult)
 {
+	APlayerController* PlayerController = Cast<APlayerController>(OtherActor->GetOwner());
+	if(!PlayerController)
+	{
+		return;
+	}
 	HJ_LOG(LogHJDefault, Log, TEXT("%s"), TEXT("Begin"));
+	UHJCardChoiceWidget* CardChoiceWidget = CreateWidget<UHJCardChoiceWidget>(GetWorld(), CardChoiceWidgetClass);
+
+	if (CardChoiceWidget)
+	{
+		CardChoiceWidget->AddToViewport();
+		for (const auto& CardData : Cards)
+		{
+			CardChoiceWidget->AddCard(CardData);
+		}
+	
+	}
+
+	FInputModeUIOnly InputMode;
+	InputMode.SetWidgetToFocus(CardChoiceWidget->TakeWidget());
+	InputMode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
+	PlayerController->SetInputMode(InputMode);
+	PlayerController->bShowMouseCursor = true;
+
+
 	SetActorEnableCollision(false);
 	Effect->Activate(true);
 	Mesh->SetHiddenInGame(true);
 
 	Effect->OnSystemFinished.AddDynamic(this, &AHJCardPack::OnEffectFinished);
+	
 }
 
 void AHJCardPack::PostInitializeComponents()

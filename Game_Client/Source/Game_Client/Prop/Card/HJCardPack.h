@@ -23,7 +23,7 @@ public:
 	// Called every frame
 	//virtual void Tick(float DeltaTime) override;
 
-	protected:
+protected:
 	FORCEINLINE class UBoxComponent* GetTrigger() { return Trigger; }
 
 protected:
@@ -32,6 +32,8 @@ protected:
 
 	UFUNCTION()
 	void OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepHitResult);
+
+
 
 protected:
 	virtual void PostInitializeComponents() override;
@@ -48,4 +50,7 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category = Cards)
 	TArray<class UHJCardData*> Cards;
+
+	UPROPERTY(EditAnywhere, Category = Cards)
+	TSubclassOf<class UHJCardChoiceWidget> CardChoiceWidgetClass;
 };

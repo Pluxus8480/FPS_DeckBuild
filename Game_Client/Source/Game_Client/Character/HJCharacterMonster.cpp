@@ -17,6 +17,7 @@
 
 AHJCharacterMonster::AHJCharacterMonster()
 {
+	bUseControllerRotationYaw = false;
 
 	AIControllerClass = AHJAIController_Monster::StaticClass();
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
@@ -58,6 +59,16 @@ void AHJCharacterMonster::UseCard(UHJBaseCard* CardUsed)
 	UParticleSystem* CardEffect = CardData->Effect.Get();
 	
 	UGameplayStatics::SpawnEmitterAttached(CardEffect, GetMesh(), TEXT("RightHand"));
+}
+
+UHJCardUserComponent* AHJCharacterMonster::GetCardUser()
+{
+	return CardUser;
+}
+
+void AHJCharacterMonster::TryAddCard(UHJCardData* CardData)
+{
+	
 }
 
 

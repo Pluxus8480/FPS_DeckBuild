@@ -10,6 +10,7 @@
 #include "../Animation/HJPlayerTPSAnimInstance.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "../Projectile/HJProjectile.h"
+#include "Card/HJCardUserComponent.h"
 
 DEFINE_LOG_CATEGORY(LogHJCharacterPlayerTPS);
 AHJCharacterPlayerTPS::AHJCharacterPlayerTPS()
@@ -57,6 +58,9 @@ AHJCharacterPlayerTPS::AHJCharacterPlayerTPS()
 	static ConstructorHelpers::FObjectFinder<UAnimMontage> AttackMontageRef(TEXT("/Game/HJProject/Animation/MagicianPlayer/AM_Magic_Attack_1.AM_Magic_Attack_1"));
 	if (nullptr != AttackMontageRef.Object)
 		AttackMontage = AttackMontageRef.Object;
+
+	//CardUser
+	CardUser = CreateDefaultSubobject<UHJCardUserComponent>(TEXT("CardUser"));
 }
 void AHJCharacterPlayerTPS::BeginPlay()
 {
@@ -291,4 +295,18 @@ void AHJCharacterPlayerTPS::AttackRotation(float DeltaTime)
 			bWantsToRotateToCamera = false;
 		}
 	}
+}
+
+void AHJCharacterPlayerTPS::UseCard(UHJBaseCard* CardUsed)
+{
+}
+
+UHJCardUserComponent* AHJCharacterPlayerTPS::GetCardUser()
+{
+	return CardUser;
+}
+
+void AHJCharacterPlayerTPS::TryAddCard(UHJCardData* CardData)
+{
+	CardUser->AddCard(CardData, 0);
 }

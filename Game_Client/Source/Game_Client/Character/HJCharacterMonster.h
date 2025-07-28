@@ -25,7 +25,8 @@ protected:
 //CardUserInterface Section
 public:
 	virtual void UseCard(class UHJBaseCard* CardUsed) override;
-
+	virtual class UHJCardUserComponent* GetCardUser() override;
+	virtual void TryAddCard(class UHJCardData* CardData) override;
 //AIInterface Section
 public:
 	void SetAIAttackDelegate(const FHJCharacterAttackFinished& OnAttackFinishedDelegate) override;

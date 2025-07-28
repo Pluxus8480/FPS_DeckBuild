@@ -6,6 +6,7 @@
 #include "Character/HJCharacterBaseTPS.h"
 #include "InputActionValue.h"
 #include "../Interface/HJProjectileAttackInterface.h"
+#include "Interface/HJCardUserInterface.h"
 #include "HJCharacterPlayerTPS.generated.h"
 
 DECLARE_LOG_CATEGORY_EXTERN(LogHJCharacterPlayerTPS, Log, All);
@@ -31,7 +32,7 @@ enum class EPlayerMovementDirection : uint8
 };
 
 UCLASS()
-class GAME_CLIENT_API AHJCharacterPlayerTPS : public AHJCharacterBaseTPS, public IHJProjectileAttackInterface
+class GAME_CLIENT_API AHJCharacterPlayerTPS : public AHJCharacterBaseTPS, public IHJProjectileAttackInterface, public IHJCardUserInterface
 {
 
 	GENERATED_BODY()
@@ -114,4 +115,13 @@ protected:
 private:
 	void AttackRotation(float DeltaTime);
 	bool bWantsToRotateToCamera = false;
+
+//CardUserInterface Section
+protected:
+	void UseCard(UHJBaseCard* CardUsed) override;
+	UHJCardUserComponent* GetCardUser() override;
+	void TryAddCard(UHJCardData* CardData) override;
+
+	UPROPERTY(VisibleAnywhere, Category = Card)
+	TObjectPtr<class UHJCardUserComponent> CardUser;
 };

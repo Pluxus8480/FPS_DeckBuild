@@ -46,7 +46,8 @@ public:
 
 	//Deck Control Section
 public:
-	void AddCard(TObjectPtr<class UHJBaseCard> NewCard, int32 DeckToAdd);
+	void AddCard(class UHJBaseCard* NewCard, int32 DeckToAdd);
+	void AddCard(class UHJCardData* NewCardData, int32 DeckToAdd);
 	void RemoveCard(int32 DeckToRemove, int32 CardIndexToRemove);
 	void Shuffle(int32 DeckToShuffle);
 

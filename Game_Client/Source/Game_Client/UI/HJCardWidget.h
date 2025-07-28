@@ -6,6 +6,9 @@
 #include "Blueprint/UserWidget.h"
 #include "HJCardWidget.generated.h"
 
+
+DECLARE_DELEGATE_OneParam(FOnCardWidgetClicked, class UHJCardWidget* /*Caller*/);
+
 /**
  * 
  */
@@ -18,20 +21,25 @@ public:
 
 protected:
 	virtual void NativeConstruct() override;
+	virtual FReply NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;
 
 public:
 	void UpdateUIData(class UHJCardData* CardData);
 
+public:
+	FOnCardWidgetClicked OnClicked;
+
 protected:
 	UPROPERTY()
-	TObjectPtr<class UTextBlock> CardName;
+	TObjectPtr<class UEditableTextBox> CardName;
 	UPROPERTY()
-	TObjectPtr<class UTextBlock> CardDescription;
+	TObjectPtr<class UMultiLineEditableTextBox> CardDescription;
 	UPROPERTY()
-	TObjectPtr<class UTextBlock> BasePower;
+	TObjectPtr<class UEditableTextBox> BasePower;
 	UPROPERTY()
-	TObjectPtr<class UTextBlock> BaseMultiplier;
+	TObjectPtr<class UEditableTextBox> BaseMultiplier;
 	UPROPERTY()
 	TObjectPtr<class UImage> Image_Card;
 	
+
 };
