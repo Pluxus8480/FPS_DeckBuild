@@ -1,0 +1,57 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+#pragma once
+
+#include "CoreMinimal.h"
+#include "GameFramework/Actor.h"
+#include "HJGun.generated.h"
+
+
+DECLARE_LOG_CATEGORY_EXTERN(LogHJGun, Log, All);
+
+UCLASS()
+class GAME_CLIENT_API AHJGun : public AActor
+{
+	GENERATED_BODY()
+	
+public:	
+	// Sets default values for this actor's properties
+	AHJGun();
+    void Fire();
+
+
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+
+
+public:
+    TObjectPtr<class UStaticMeshComponent> const GetMeshComponent() { return GunMeshComponent; }
+    FName GetGunTypeNameTag() const { return GunTypeTag; }
+
+ protected:
+    // ÃÑ±â ¸Þ½¬ (1ÀÎÄª¿ë)
+    UPROPERTY(EditAnywhere)
+    TObjectPtr<class UStaticMeshComponent> GunMeshComponent;
+
+    UPROPERTY(EditAnywhere, Category = "Mesh")
+    TObjectPtr <class UStaticMesh> GunMesh;
+
+    UPROPERTY(EditAnywhere)
+    FName GunTypeTag = TEXT("GunType");
+
+    // ÃÑ±¸¿¡¼­ ÀÌÆåÆ®¿Í ÅºÈ¯ÀÌ ³ª°¡´Â À§Ä¡
+    UPROPERTY(EditAnywhere)
+    FName MuzzleSocketName = TEXT("MuzzleFlashSocket");
+
+    // ÀÌÆåÆ® & »ç¿îµå
+    UPROPERTY(EditAnywhere)
+    TObjectPtr<class UNiagaraSystem> GunEffect;
+
+    UPROPERTY(EditAnywhere)
+    TObjectPtr<class USoundBase> FireSound;
+
+    AController* GetOwnerController() const;
+
+
+};
