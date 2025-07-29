@@ -7,7 +7,7 @@
 #include "Components/MultiLineEditableTextBox.h"
 #include "Components/Image.h"
 #include "Card/HJCardData.h"
-#include "HJCardUIInterface.h"
+#include "Interface/HJCardUIInterface.h"
 
 
 

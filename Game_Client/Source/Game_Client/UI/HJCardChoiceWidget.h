@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
-#include "HJCardUIInterface.h"
+#include "Interface/HJCardUIInterface.h"
 #include "HJCardChoiceWidget.generated.h"
 
 /**
