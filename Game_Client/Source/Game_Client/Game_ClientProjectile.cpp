@@ -27,6 +27,7 @@ AGame_ClientProjectile::AGame_ClientProjectile()
 	ProjectileMovement->bRotationFollowsVelocity = true;
 	ProjectileMovement->bShouldBounce = true;
 
+
 	// Die after 3 seconds by default
 	InitialLifeSpan = 3.0f;
 }
