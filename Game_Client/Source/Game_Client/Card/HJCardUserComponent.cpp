@@ -19,6 +19,7 @@ UHJCardUserComponent::UHJCardUserComponent()
 	if (0 == Decks.Num())
 	{
 		Decks.Add({});
+		CurrentTopDeckIndex.Add({});
 	}
 }
 
