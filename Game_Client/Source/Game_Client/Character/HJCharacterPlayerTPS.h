@@ -112,9 +112,6 @@ protected:
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<class AHJProjectile> CurrentProjectile;
 
-private:
-	void AttackRotation(float DeltaTime);
-	bool bWantsToRotateToCamera = false;
 
 //CardUserInterface Section
 protected:

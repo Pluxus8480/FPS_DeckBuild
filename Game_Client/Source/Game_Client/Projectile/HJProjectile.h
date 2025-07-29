@@ -4,10 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "HJAttackObject.h"
 #include "HJProjectile.generated.h"
 
 UCLASS()
-class GAME_CLIENT_API AHJProjectile : public AActor
+class GAME_CLIENT_API AHJProjectile : public AHJAttackObject
 {
 	GENERATED_BODY()
 	

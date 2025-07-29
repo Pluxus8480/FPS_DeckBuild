@@ -9,6 +9,14 @@
 /**
  * 
  */
+UENUM()
+enum class ECardTypeData : uint8
+{
+	Projectile = 0,
+	Slash,
+};
+
+
 UCLASS()
 class GAME_CLIENT_API UHJCardData : public UPrimaryDataAsset
 {
@@ -43,10 +51,20 @@ public:
 	UPROPERTY(EditAnywhere, Category = Character)
 	FName MotionTag;
 
+	UPROPERTY(EditAnywhere, Category = CardType)
+	ECardTypeData CardTypeData;
+
+	UPROPERTY(EditAnywhere, Category = Projectile)
+	float ProjectileSpeed;
+
 	UPROPERTY(EditAnywhere, Category = Effect)
-	TSoftObjectPtr<class UParticleSystem> Effect;
+	TSubclassOf<class AHJAttackObject> AttackObject;
+
+
 	UPROPERTY(EditAnywhere, Category = Effect)
-	TSoftObjectPtr<class UParticleSystem> DisappearingEffect;
+	TSoftObjectPtr<class UNiagaraSystem> Effect;
+	UPROPERTY(EditAnywhere, Category = Effect)
+	TSoftObjectPtr<class UNiagaraSystem> DisappearingEffect;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = CardClass)
 	TSubclassOf<class UHJBaseCard> CardClass;

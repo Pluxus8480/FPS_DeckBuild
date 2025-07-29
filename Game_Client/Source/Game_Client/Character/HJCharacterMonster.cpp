@@ -13,6 +13,8 @@
 #include "Card/HJCardData.h"
 #include "Particles/ParticleSystem.h"
 #include "Kismet/GameplayStatics.h"
+#include "NiagaraSystem.h"
+#include "NiagaraFunctionLibrary.h" 
 
 
 AHJCharacterMonster::AHJCharacterMonster()
@@ -56,9 +58,18 @@ void AHJCharacterMonster::UseCard(UHJBaseCard* CardUsed)
 	{
 		CardData->Effect.LoadSynchronous();
 	}
-	UParticleSystem* CardEffect = CardData->Effect.Get();
+	UNiagaraSystem* CardEffect = CardData->Effect.Get();
 	
-	UGameplayStatics::SpawnEmitterAttached(CardEffect, GetMesh(), TEXT("RightHand"));
+	UNiagaraFunctionLibrary::SpawnSystemAttached(
+		CardEffect,                          // NiagaraSystem*
+		GetMesh(),                           // USceneComponent* AttachToComponent
+		TEXT("RightHand"),                   // FName AttachPointName (소켓 이름)
+		FVector::ZeroVector,                 // Location offset
+		FRotator::ZeroRotator,              // Rotation offset
+		EAttachLocation::SnapToTarget,      // AttachLocationType
+		true                                // bAutoDestroy
+	);
+
 }
 
 UHJCardUserComponent* AHJCharacterMonster::GetCardUser()

@@ -11,6 +11,9 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "../Projectile/HJProjectile.h"
 #include "Card/HJCardUserComponent.h"
+#include "../Card/HJBaseCard.h"
+#include "../Card/HJCardData.h"
+#include "../Projectile/HJAttackObject.h"
 
 DEFINE_LOG_CATEGORY(LogHJCharacterPlayerTPS);
 AHJCharacterPlayerTPS::AHJCharacterPlayerTPS()
@@ -89,8 +92,6 @@ void AHJCharacterPlayerTPS::Tick(float DeltaTime)
 		CheckKeyInput(false);
 	else
 		CheckKeyInput(true);
-
-	AttackRotation(DeltaTime);
 }
 void AHJCharacterPlayerTPS::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
@@ -135,20 +136,10 @@ void AHJCharacterPlayerTPS::FireProjectile()
 			FVector Direction = FollowCamera->GetForwardVector();
 			//FVector FireDirection = ProjectileRotation.Vector();
 			Projectile->FireInDirection(Direction);
-			/*FVector WorldLocation;
-			FVector WorldDirection;
-
-			APlayerController* PC = Cast<APlayerController>(GetController());
-			if (PC && PC->DeprojectScreenPositionToWorld(
-				GEngine->GameViewport->Viewport->GetSizeXY().X / 2.f,
-				GEngine->GameViewport->Viewport->GetSizeXY().Y / 2.f,
-				WorldLocation, WorldDirection))
-			{
-				Projectile->FireInDirection(WorldDirection);
-			}*/
 			
 		}
 	}
+	CurrentProjectile = nullptr;
 }
 
 void AHJCharacterPlayerTPS::TPSMove(const FInputActionValue& Value)
@@ -235,14 +226,12 @@ void AHJCharacterPlayerTPS::TPSAttack(const FInputActionValue& Value)
 		{
 		/*	UE_LOG(LogHJCharacterPlayerTPS, Warning, TEXT("Montage Play"));*/
 			AnimInstance->Montage_Play(AttackMontage);
-			bWantsToRotateToCamera = true;
 		}
 	}
 }
 
 void AHJCharacterPlayerTPS::CheckKeyInput(bool IsInput)
 {
-
 	UHJPlayerTPSAnimInstance* Anim = Cast<UHJPlayerTPSAnimInstance>(GetMesh()->GetAnimInstance());
 	if (Anim)
 	{
@@ -274,31 +263,28 @@ void AHJCharacterPlayerTPS::SetMovementDirection(EPlayerMovementDirection NewTyp
 	
 }
 
-void AHJCharacterPlayerTPS::AttackRotation(float DeltaTime)
-{
-	if (bWantsToRotateToCamera)
-	{
-		APlayerController* PC = Cast<APlayerController>(GetController());
-		if (!PC) return;
-
-		FRotator TargetRot = FRotator(0.f, PC->GetControlRotation().Yaw, 0.f);
-		FRotator CurrentRot = GetActorRotation();
-
-		float Speed = 10.f;
-		FRotator NewRot = FMath::RInterpTo(CurrentRot, TargetRot, DeltaTime, Speed);
-
-		SetActorRotation(NewRot);
-
-		float YawDiff = FMath::Abs(FRotator::NormalizeAxis(TargetRot.Yaw - NewRot.Yaw));
-		if (YawDiff < 1.0f) // 거의 회전 완료 상태
-		{
-			bWantsToRotateToCamera = false;
-		}
-	}
-}
-
 void AHJCharacterPlayerTPS::UseCard(UHJBaseCard* CardUsed)
 {
+	
+	TSubclassOf<AHJAttackObject> AttackObject =  CardUsed->GetCardData()->AttackObject;
+	ECardTypeData CardType =  CardUsed->GetCardData()->CardTypeData;
+	if (AttackObject)
+	{
+		switch (CardType)
+		{
+		case ECardTypeData::Projectile:
+		{
+			TSubclassOf<AHJProjectile> ProjectileClass = Cast<UClass>(AttackObject);
+			CurrentProjectile = ProjectileClass;
+			FireProjectile();
+			break;
+		}
+		case ECardTypeData::Slash:
+			break;
+		default:
+			break;
+		}
+	}
 }
 
 UHJCardUserComponent* AHJCharacterPlayerTPS::GetCardUser()
