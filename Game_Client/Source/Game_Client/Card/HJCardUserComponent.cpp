@@ -60,6 +60,7 @@ void UHJCardUserComponent::UseCard()
 	{
 		CardUser->UseCard(Decks[CurrentDeck].Deck[CurrentTopDeckIndex[CurrentDeck]]);
 	}
+	NextCard();
 }
 
 void UHJCardUserComponent::AddCard(UHJBaseCard* NewCard, int32 DeckToAdd)

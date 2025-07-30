@@ -73,6 +73,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, Meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class UInputAction> AttackAction;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, Meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<class UInputAction> InteractAction;
+
 	void TPSMove(const FInputActionValue& Value);
 	void TPSLook(const FInputActionValue& Value);
 	void TPSToggleSprint();
@@ -121,4 +124,13 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, Category = Card)
 	TObjectPtr<class UHJCardUserComponent> CardUser;
+
+//Interact Section
+protected:
+	UPROPERTY(VisibleAnywhere, Category = Interaction)
+	TObjectPtr<class UHJInteractorComponent> Interactor;
+
+	void Interact();
+
+
 };

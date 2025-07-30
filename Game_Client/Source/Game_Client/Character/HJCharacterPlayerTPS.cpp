@@ -14,6 +14,7 @@
 #include "../Card/HJBaseCard.h"
 #include "../Card/HJCardData.h"
 #include "../Projectile/HJAttackObject.h"
+#include "Interaction/HJInteractorComponent.h"
 
 DEFINE_LOG_CATEGORY(LogHJCharacterPlayerTPS);
 AHJCharacterPlayerTPS::AHJCharacterPlayerTPS()
@@ -57,6 +58,9 @@ AHJCharacterPlayerTPS::AHJCharacterPlayerTPS()
 	if (nullptr != AttackActionMoveRef.Object)
 		AttackAction = AttackActionMoveRef.Object;
 
+	static ConstructorHelpers::FObjectFinder<UInputAction> InputActionInteractRef(TEXT("/Script/EnhancedInput.InputAction'/Game/HJProject/Input/Actions/IA_Interact.IA_Interact'"));
+	if (nullptr != InputActionInteractRef.Object)
+		InteractAction = InputActionInteractRef.Object;
 
 	static ConstructorHelpers::FObjectFinder<UAnimMontage> AttackMontageRef(TEXT("/Game/HJProject/Animation/MagicianPlayer/AM_Magic_Attack_1.AM_Magic_Attack_1"));
 	if (nullptr != AttackMontageRef.Object)
@@ -64,6 +68,8 @@ AHJCharacterPlayerTPS::AHJCharacterPlayerTPS()
 
 	//CardUser
 	CardUser = CreateDefaultSubobject<UHJCardUserComponent>(TEXT("CardUser"));
+	//Interactor
+	Interactor = CreateDefaultSubobject<UHJInteractorComponent>(TEXT("Interactor"));
 }
 void AHJCharacterPlayerTPS::BeginPlay()
 {
@@ -105,6 +111,7 @@ void AHJCharacterPlayerTPS::SetupPlayerInputComponent(UInputComponent* PlayerInp
 	EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AHJCharacterPlayerTPS::TPSLook);
 	EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Triggered, this, &AHJCharacterPlayerTPS::TPSToggleSprint);
 	EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Triggered, this, &AHJCharacterPlayerTPS::TPSAttack);
+	EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Triggered, this, &AHJCharacterPlayerTPS::Interact);
 }
 
 void AHJCharacterPlayerTPS::FireProjectile()
@@ -295,4 +302,9 @@ UHJCardUserComponent* AHJCharacterPlayerTPS::GetCardUser()
 void AHJCharacterPlayerTPS::TryAddCard(UHJCardData* CardData)
 {
 	CardUser->AddCard(CardData, 0);
+}
+
+void AHJCharacterPlayerTPS::Interact()
+{
+	Interactor->TryInteract();
 }
