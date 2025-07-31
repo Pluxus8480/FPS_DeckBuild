@@ -32,7 +32,7 @@ AHJCardPack::AHJCardPack()
 	{
 		Mesh->SetStaticMesh(BoxMeshRef.Object);
 	}
-	Mesh->SetCollisionProfileName(TEXT("NoCollision"));
+	//Mesh->SetCollisionProfileName(TEXT("NoCollision"));
 
 	static ConstructorHelpers::FObjectFinder<UParticleSystem> EffectRef(TEXT("Script/Engine.ParticleSystem'/Game/StarterContent/Particles/P_Sparks.P_Sparks'"));
 	if (EffectRef.Object)
@@ -59,41 +59,6 @@ void AHJCardPack::BeginPlay()
 void AHJCardPack::OnEffectFinished(UParticleSystemComponent* ParticleSystem)
 {
 	Destroy();
-}
-
-void AHJCardPack::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepHitResult)
-{
-	APlayerController* PlayerController = Cast<APlayerController>(OtherActor->GetOwner());
-	if(!PlayerController)
-	{
-		return;
-	}
-	HJ_LOG(LogHJDefault, Log, TEXT("%s"), TEXT("Begin"));
-	UHJCardChoiceWidget* CardChoiceWidget = CreateWidget<UHJCardChoiceWidget>(GetWorld(), CardChoiceWidgetClass);
-
-	if (CardChoiceWidget)
-	{
-		CardChoiceWidget->AddToViewport();
-		for (const auto& CardData : Cards)
-		{
-			CardChoiceWidget->AddCard(CardData);
-		}
-	
-	}
-
-	FInputModeUIOnly InputMode;
-	InputMode.SetWidgetToFocus(CardChoiceWidget->TakeWidget());
-	InputMode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
-	PlayerController->SetInputMode(InputMode);
-	PlayerController->bShowMouseCursor = true;
-
-
-	SetActorEnableCollision(false);
-	Effect->Activate(true);
-	Mesh->SetHiddenInGame(true);
-
-	Effect->OnSystemFinished.AddDynamic(this, &AHJCardPack::OnEffectFinished);
-	
 }
 
 void AHJCardPack::PostInitializeComponents()
@@ -130,8 +95,41 @@ void AHJCardPack::PostInitializeComponents()
 			}
 		}
 	}
-	
-	Trigger->OnComponentBeginOverlap.AddDynamic(this, &AHJCardPack::OnOverlapBegin);
+}
+
+void AHJCardPack::ExecuteInteract(AActor* InteractingActor)
+{
+	APlayerController* PlayerController = Cast<APlayerController>(InteractingActor->GetOwner());
+	if (!PlayerController)
+	{
+		return;
+	}
+	HJ_LOG(LogHJDefault, Log, TEXT("%s"), TEXT("Begin"));
+	UHJCardChoiceWidget* CardChoiceWidget = CreateWidget<UHJCardChoiceWidget>(GetWorld(), CardChoiceWidgetClass);
+
+	if (CardChoiceWidget)
+	{
+		CardChoiceWidget->AddToViewport();
+		for (const auto& CardData : Cards)
+		{
+			CardChoiceWidget->AddCard(CardData);
+		}
+
+	}
+
+	FInputModeUIOnly InputMode;
+	InputMode.SetWidgetToFocus(CardChoiceWidget->TakeWidget());
+	InputMode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
+	PlayerController->SetInputMode(InputMode);
+	PlayerController->bShowMouseCursor = true;
+
+
+	SetActorEnableCollision(false);
+	Effect->Activate(true);
+	Mesh->SetHiddenInGame(true);
+
+	Effect->OnSystemFinished.AddDynamic(this, &AHJCardPack::OnEffectFinished);
+
 }
 
 // Called every frame

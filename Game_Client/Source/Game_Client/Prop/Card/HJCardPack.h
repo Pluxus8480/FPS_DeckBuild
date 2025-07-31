@@ -4,10 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Interface/HJInteractableInterface.h"
 #include "HJCardPack.generated.h"
 
 UCLASS()
-class GAME_CLIENT_API AHJCardPack : public AActor
+class GAME_CLIENT_API AHJCardPack : public AActor, public IHJInteractableInterface
 {
 	GENERATED_BODY()
 	
@@ -30,8 +31,8 @@ protected:
 	UFUNCTION()
 	void OnEffectFinished(class UParticleSystemComponent* ParticleSystem);
 
-	UFUNCTION()
-	void OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepHitResult);
+	//UFUNCTION()
+	//void OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepHitResult);
 
 
 
@@ -53,4 +54,7 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category = Cards)
 	TSubclassOf<class UHJCardChoiceWidget> CardChoiceWidgetClass;
+
+	// IHJInteractableInterface을(를) 통해 상속됨
+	void ExecuteInteract(AActor* InteractingActor) override;
 };

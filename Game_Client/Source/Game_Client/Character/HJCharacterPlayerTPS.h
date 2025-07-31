@@ -73,6 +73,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, Meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class UInputAction> AttackAction;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, Meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<class UInputAction> InteractAction;
+
 	void TPSMove(const FInputActionValue& Value);
 	void TPSLook(const FInputActionValue& Value);
 	void TPSToggleSprint();
@@ -99,7 +102,7 @@ protected:
 
 	EPlayerState CurrnetMovementType = EPlayerState::IDLE;
 	EPlayerMovementDirection CurrnetMovementDirection = EPlayerMovementDirection::WALK_F;
-	// ¾ó¸¶³ª ÀÔ·ÂÀÌ ÀÛÀ¸¸é Á¤Áö·Î ÆÇ´ÜÇÒÁö
+	// ï¿½ó¸¶³ï¿½ ï¿½Ô·ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ç´ï¿½ï¿½ï¿½ï¿½ï¿½
 	const float SprintStopThreshold = 0.1f;
 
 
@@ -131,4 +134,14 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = HUD)
 	TObjectPtr<class UHJCrosshairWidget> HJCrosshiarWidget;
+//Interact Section
+protected:
+	UPROPERTY(VisibleAnywhere, Category = Interaction)
+	TObjectPtr<class UHJInteractorComponent> Interactor;
+
+	void Interact();
+
+	FKey GetInteractionKey();
+
+
 };

@@ -14,10 +14,15 @@
 #include "../Card/HJBaseCard.h"
 #include "../Card/HJCardData.h"
 #include "../Projectile/HJAttackObject.h"
+
 #include "Interface/HJLockonAbleTargetInterface.h"
 #include "../UI/HJCrosshairWidget.h"
 #include "Kismet/GameplayStatics.h"
-#include "Blueprint/UserWidget.h"  // ²À ÀÖ¾î¾ß ÇÕ´Ï´Ù!
+#include "Blueprint/UserWidget.h"  
+
+#include "Interaction/HJInteractorComponent.h"
+#include "Engine/LocalPlayer.h"
+
 
 DEFINE_LOG_CATEGORY(LogHJCharacterPlayerTPS);
 AHJCharacterPlayerTPS::AHJCharacterPlayerTPS()
@@ -68,6 +73,9 @@ AHJCharacterPlayerTPS::AHJCharacterPlayerTPS()
 	if (nullptr != AttackActionMoveRef.Object)
 		AttackAction = AttackActionMoveRef.Object;
 
+	static ConstructorHelpers::FObjectFinder<UInputAction> InputActionInteractRef(TEXT("/Script/EnhancedInput.InputAction'/Game/HJProject/Input/Actions/IA_Interact.IA_Interact'"));
+	if (nullptr != InputActionInteractRef.Object)
+		InteractAction = InputActionInteractRef.Object;
 
 	static ConstructorHelpers::FObjectFinder<UAnimMontage> AttackMontageRef(TEXT("/Game/HJProject/Animation/MagicianPlayer/AM_Magic_Attack_1.AM_Magic_Attack_1"));
 	if (nullptr != AttackMontageRef.Object)
@@ -75,6 +83,8 @@ AHJCharacterPlayerTPS::AHJCharacterPlayerTPS()
 
 	//CardUser
 	CardUser = CreateDefaultSubobject<UHJCardUserComponent>(TEXT("CardUser"));
+	//Interactor
+	Interactor = CreateDefaultSubobject<UHJInteractorComponent>(TEXT("Interactor"));
 }
 void AHJCharacterPlayerTPS::BeginPlay()
 {
@@ -104,7 +114,7 @@ void AHJCharacterPlayerTPS::Tick(float DeltaTime)
 
 	UpdateCrosshairTarget();
 	FVector InputVec = GetLastMovementInputVector();
-	// ÀÔ·Â ¾øÀ» ¶§ ½ºÇÁ¸°Æ® ²ô±â
+	// ï¿½Ô·ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½
 	if (CurrnetMovementType == EPlayerState::SPRINT && InputVec.SizeSquared() < SprintStopThreshold * SprintStopThreshold)
 	{
 		CurrnetMovementType = EPlayerState::WALK_FRONT;
@@ -128,17 +138,18 @@ void AHJCharacterPlayerTPS::SetupPlayerInputComponent(UInputComponent* PlayerInp
 	EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AHJCharacterPlayerTPS::TPSLook);
 	EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Triggered, this, &AHJCharacterPlayerTPS::TPSToggleSprint);
 	EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Triggered, this, &AHJCharacterPlayerTPS::TPSAttack);
+	EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Triggered, this, &AHJCharacterPlayerTPS::Interact);
 }
 
 void AHJCharacterPlayerTPS::FireProjectile()
 {
 	UWorld* World = Owner->GetWorld();
 	if (!World) return;
-	// ¼ÒÄÏ À§Ä¡
+	// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡
 	FVector ProjectileLocation = GetMesh()->GetSocketLocation("MagicAttack1Socket");
 	FRotator ProjectileRotation = GetMesh()->GetSocketRotation("MagicAttack1Socket");
 
-	// Åõ»çÃ¼ ½ºÆù
+	// ï¿½ï¿½ï¿½ï¿½Ã¼ ï¿½ï¿½ï¿½ï¿½
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.Owner = Owner;
 	SpawnParams.Instigator = Owner->GetInstigator();
@@ -153,7 +164,7 @@ void AHJCharacterPlayerTPS::FireProjectile()
 			SpawnParams
 		);
 
-		// ¹ß»ç ¹æÇâ ¼¼ÆÃ
+		// ï¿½ß»ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 		if (Projectile)
 		{
 			//FVector Direction = FollowCamera->GetForwardVector();
@@ -178,7 +189,7 @@ void AHJCharacterPlayerTPS::TPSMove(const FInputActionValue& Value)
 	AddMovementInput(ForwardDirection, MovementVector.X);
 	AddMovementInput(RightDirection, MovementVector.Y);
 
-	// ¹æÇâ ºÐ¼®
+	// ï¿½ï¿½ï¿½ï¿½ ï¿½Ð¼ï¿½
 	FVector MovementInput = ForwardDirection * MovementVector.X + RightDirection * MovementVector.Y;
 
 	if (MovementInput.IsNearlyZero())
@@ -290,7 +301,7 @@ void AHJCharacterPlayerTPS::UpdateCrosshairTarget()
 {
 	FVector Start = FollowCamera->GetComponentLocation();
 	FVector ForwardVector = FollowCamera->GetForwardVector();
-	FVector End = Start + (ForwardVector * 5000.f); // ±æÀÌ´Â ÇÊ¿ä¿¡ µû¶ó Á¶Àý
+	FVector End = Start + (ForwardVector * 5000.f); // ï¿½ï¿½ï¿½Ì´ï¿½ ï¿½Ê¿ä¿¡ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
 	FHitResult Hit;
 	FCollisionQueryParams Params;
@@ -314,12 +325,12 @@ void AHJCharacterPlayerTPS::UpdateCrosshairTarget()
 
 		if (TargetActor && PC)
 		{
-			// ¾×ÅÍÀÇ ¹Ù¿îµù ¹Ú½º Áß½É ±¸ÇÏ±â
+			// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ù¿ï¿½ï¿½ ï¿½Ú½ï¿½ ï¿½ß½ï¿½ ï¿½ï¿½ï¿½Ï±ï¿½
 			FVector Origin;
 			FVector BoxExtent;
 			TargetActor->GetActorBounds(true, Origin, BoxExtent);
 			
-			// Áß½É À§Ä¡¸¦ ½ºÅ©¸° ÁÂÇ¥·Î º¯È¯
+			// ï¿½ß½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½Å©ï¿½ï¿½ ï¿½ï¿½Ç¥ï¿½ï¿½ ï¿½ï¿½È¯
 			if (PC->ProjectWorldLocationToScreen(Origin, ScreenPos, true))
 			{
 				AimDirection = (Origin - Start).GetSafeNormal();
@@ -366,4 +377,27 @@ UHJCardUserComponent* AHJCharacterPlayerTPS::GetCardUser()
 void AHJCharacterPlayerTPS::TryAddCard(UHJCardData* CardData)
 {
 	CardUser->AddCard(CardData, 0);
+}
+
+void AHJCharacterPlayerTPS::Interact()
+{
+	Interactor->TryInteract();
+}
+
+FKey AHJCharacterPlayerTPS::GetInteractionKey()
+{
+	if (!DefaultMappingContext || !InteractAction)
+		return FKey{};
+
+	const TArray<FEnhancedActionKeyMapping>& Mappings = DefaultMappingContext->GetMappings();
+
+	for (const FEnhancedActionKeyMapping& Mapping : Mappings)
+	{
+		if (Mapping.Action == InteractAction)
+		{
+			return Mapping.Key;
+		}
+	}
+
+	return FKey{};
 }
