@@ -111,8 +111,9 @@ protected:
 
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<class AHJProjectile> CurrentProjectile;
-
-
+private:
+	void UpdateCrosshairTarget();
+	FVector AimDirection = {};
 //CardUserInterface Section
 protected:
 	void UseCard(UHJBaseCard* CardUsed) override;
@@ -121,4 +122,13 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, Category = Card)
 	TObjectPtr<class UHJCardUserComponent> CardUser;
+
+
+// UI Section
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = HUD)
+	TSubclassOf<class UHJCrosshairWidget> HJCrosshairWidgetClass;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = HUD)
+	TObjectPtr<class UHJCrosshairWidget> HJCrosshiarWidget;
 };

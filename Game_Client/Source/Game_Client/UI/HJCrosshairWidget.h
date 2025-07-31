@@ -13,5 +13,18 @@ UCLASS()
 class GAME_CLIENT_API UHJCrosshairWidget : public UUserWidget
 {
 	GENERATED_BODY()
-	
+public:
+
+	void NativeConstruct() override;
+	UFUNCTION(BlueprintCallable)
+	void SetCrosshairPosition(const FVector2D& ScreenPosition);
+	void ResetCrossharPosition();
+
+protected:
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<class UImage> CrosshairImage;
+
+private:
+	FVector2D ViewportCenterOffset = {};
+
 };

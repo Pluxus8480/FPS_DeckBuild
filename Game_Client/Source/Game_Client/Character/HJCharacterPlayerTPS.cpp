@@ -14,6 +14,10 @@
 #include "../Card/HJBaseCard.h"
 #include "../Card/HJCardData.h"
 #include "../Projectile/HJAttackObject.h"
+#include "Interface/HJLockonAbleTargetInterface.h"
+#include "../UI/HJCrosshairWidget.h"
+#include "Kismet/GameplayStatics.h"
+#include "Blueprint/UserWidget.h"  // 꼭 있어야 합니다!
 
 DEFINE_LOG_CATEGORY(LogHJCharacterPlayerTPS);
 AHJCharacterPlayerTPS::AHJCharacterPlayerTPS()
@@ -32,6 +36,13 @@ AHJCharacterPlayerTPS::AHJCharacterPlayerTPS()
 
 	// Move
 	GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
+
+	// UI
+	static ConstructorHelpers::FClassFinder<UHJCrosshairWidget> HJHUDWidgetRef(TEXT("/Game/UI/WBP_Crosshair.WBP_Crosshair_C"));
+	if (HJHUDWidgetRef.Class)
+	{
+		HJCrosshairWidgetClass = HJHUDWidgetRef.Class;
+	}
 
 	// Input
 	static ConstructorHelpers::FObjectFinder<UInputMappingContext> InputMappingContextRef(TEXT("/Script/EnhancedInput.InputMappingContext'/Game/HJProject/Input/IMC_TPS.IMC_TPS'"));
@@ -75,11 +86,23 @@ void AHJCharacterPlayerTPS::BeginPlay()
 		Subsystem->AddMappingContext(DefaultMappingContext, 0);
 		//Subsystem->RemoveMappingContext(DefaultMappingContext);
 	}
+
+	APlayerController* PC = Cast<APlayerController>(GetController());
+	if (PC && HJCrosshairWidgetClass)
+	{
+		HJCrosshiarWidget = CreateWidget<UHJCrosshairWidget>(PC, HJCrosshairWidgetClass);
+		if (HJCrosshiarWidget)
+		{
+			HJCrosshiarWidget->AddToViewport();
+		}
+	}
+
 }
 void AHJCharacterPlayerTPS::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	UpdateCrosshairTarget();
 	FVector InputVec = GetLastMovementInputVector();
 	// 입력 없을 때 스프린트 끄기
 	if (CurrnetMovementType == EPlayerState::SPRINT && InputVec.SizeSquared() < SprintStopThreshold * SprintStopThreshold)
@@ -133,9 +156,9 @@ void AHJCharacterPlayerTPS::FireProjectile()
 		// 발사 방향 세팅
 		if (Projectile)
 		{
-			FVector Direction = FollowCamera->GetForwardVector();
+			//FVector Direction = FollowCamera->GetForwardVector();
 			//FVector FireDirection = ProjectileRotation.Vector();
-			Projectile->FireInDirection(Direction);
+			Projectile->FireInDirection(AimDirection);
 			
 		}
 	}
@@ -261,6 +284,54 @@ void AHJCharacterPlayerTPS::SetMovementDirection(EPlayerMovementDirection NewTyp
 {
 	CurrnetMovementDirection = NewType;
 	
+}
+
+void AHJCharacterPlayerTPS::UpdateCrosshairTarget()
+{
+	FVector Start = FollowCamera->GetComponentLocation();
+	FVector ForwardVector = FollowCamera->GetForwardVector();
+	FVector End = Start + (ForwardVector * 5000.f); // 길이는 필요에 따라 조절
+
+	FHitResult Hit;
+	FCollisionQueryParams Params;
+	Params.AddIgnoredActor(this);
+
+	bool bHit = GetWorld()->SweepSingleByChannel(
+		Hit,
+		Start,
+		End,
+		FQuat::Identity,
+		ECC_GameTraceChannel2,
+		FCollisionShape::MakeSphere(15.f),
+		Params
+	);
+	FVector2D ScreenPos;
+	if (bHit && Hit.GetActor()->Implements<UHJLockonAbleTargetInterface>())
+	{
+
+		AActor* TargetActor = Hit.GetActor();
+		APlayerController* PC = Cast<APlayerController>(GetController());
+
+		if (TargetActor && PC)
+		{
+			// 액터의 바운딩 박스 중심 구하기
+			FVector Origin;
+			FVector BoxExtent;
+			TargetActor->GetActorBounds(true, Origin, BoxExtent);
+			
+			// 중심 위치를 스크린 좌표로 변환
+			if (PC->ProjectWorldLocationToScreen(Origin, ScreenPos, true))
+			{
+				AimDirection = (Origin - Start).GetSafeNormal();
+				HJCrosshiarWidget->SetCrosshairPosition(ScreenPos);
+			}
+		}
+	}
+	else
+	{
+		AimDirection = FollowCamera->GetForwardVector();
+		HJCrosshiarWidget->ResetCrossharPosition();
+	}
 }
 
 void AHJCharacterPlayerTPS::UseCard(UHJBaseCard* CardUsed)

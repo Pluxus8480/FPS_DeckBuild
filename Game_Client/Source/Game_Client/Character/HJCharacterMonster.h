@@ -6,13 +6,14 @@
 #include "Character/HJCharacterBase.h"
 #include "Interface/HJCharacterAIInterface.h"
 #include "Interface/HJCardUserInterface.h"
+#include "Interface/HJLockonAbleTargetInterface.h"
 #include "HJCharacterMonster.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class GAME_CLIENT_API AHJCharacterMonster : public AHJCharacterBase, public IHJCharacterAIInterface, public IHJCardUserInterface
+class GAME_CLIENT_API AHJCharacterMonster : public AHJCharacterBase, public IHJCharacterAIInterface, public IHJCardUserInterface, public IHJLockonAbleTargetInterface
 {
 	GENERATED_BODY()
 	
