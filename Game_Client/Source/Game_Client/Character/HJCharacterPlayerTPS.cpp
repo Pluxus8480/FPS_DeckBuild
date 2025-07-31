@@ -15,6 +15,8 @@
 #include "../Card/HJCardData.h"
 #include "../Projectile/HJAttackObject.h"
 #include "Interaction/HJInteractorComponent.h"
+#include "Engine/LocalPlayer.h"
+
 
 DEFINE_LOG_CATEGORY(LogHJCharacterPlayerTPS);
 AHJCharacterPlayerTPS::AHJCharacterPlayerTPS()
@@ -307,4 +309,22 @@ void AHJCharacterPlayerTPS::TryAddCard(UHJCardData* CardData)
 void AHJCharacterPlayerTPS::Interact()
 {
 	Interactor->TryInteract();
+}
+
+FKey AHJCharacterPlayerTPS::GetInteractionKey()
+{
+	if (!DefaultMappingContext || !InteractAction)
+		return FKey{};
+
+	const TArray<FEnhancedActionKeyMapping>& Mappings = DefaultMappingContext->GetMappings();
+
+	for (const FEnhancedActionKeyMapping& Mapping : Mappings)
+	{
+		if (Mapping.Action == InteractAction)
+		{
+			return Mapping.Key;
+		}
+	}
+
+	return FKey{};
 }

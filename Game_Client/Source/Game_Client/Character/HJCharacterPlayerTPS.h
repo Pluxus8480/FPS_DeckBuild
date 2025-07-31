@@ -132,5 +132,6 @@ protected:
 
 	void Interact();
 
+	FKey GetInteractionKey();
 
 };
